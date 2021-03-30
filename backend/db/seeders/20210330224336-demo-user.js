@@ -9,35 +9,26 @@ module.exports = {
         email: 'tom@mail.com',
         username: 'tombetthauser',
         hashedPassword: bcrypt.hashSync('password'),
-      },
-      {
-        email: faker.internet.email(),
-        username: faker.internet.userName(),
-        hashedPassword: bcrypt.hashSync('password'),
       }
     ], { returning: true })
 
     for (let i = 0; i < 10; i++) {
+      const firstName = faker.name.firstName().toLowerCase();
+      const lastName = faker.name.lastName().toLowerCase();
+
       const user = await queryInterface.bulkInsert('Users', [
         {
-          email: faker.internet.email(),
-          username: faker.internet.userName(),
+          email: `${firstName}@mail.com`,
+          username: firstName + lastName,
           hashedPassword: bcrypt.hashSync('password'),
         }
       ], { returning: true })
       users.push(user);
-    }
-    
-    ;
+    };
   },
 
   down: async (queryInterface, _Sequelize) => {
     await queryInterface.bulkDelete('Users', null, {});
     return;
-
-    // const Op = Sequelize.Op;
-    // return queryInterface.bulkDelete('Users', {
-    //   username: { [Op.in]: ['Demo-lition', 'FakeUser1', 'FakeUser2'] }
-    // }, {});
   }
 };
